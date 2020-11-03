@@ -38,17 +38,9 @@ export default function Friends() {
             <div style={{ fontWeight: 'bold' }}>Friends</div>
             {friends && friends.map((friend, index) =>
                 <div key={index} style={{ marginTop: '10px'}}>
-                    <div style={{fontSize:'1.3em'}}>{friend.name}</div>
+                    <img src={friend.photoURL} alt='' style={{display: 'inline-block', height:'3em'}}></img>
+                    <div style={{fontSize:'1.3em', display: 'inline-block'}}>{friend.name}</div>
                     <FriendsMovies friend={friend} />
-                    {/*<br />
-                    <img style={{height:'2em'}} src={friend.last3Movies[0].Poster} alt=''></img>
-                    <div style={{height:'1.5em'}}>{friend.last3Movies[0].Title}</div>
-
-                    <img style={{height:'2em'}} src={friend.last3Movies[1].Poster} alt=''></img>
-                    <div style={{height:'1.5em'}}>{friend.last3Movies[1].Title}</div>
-                    
-                    <img style={{height:'2em'}} src={friend.last3Movies[2].Poster} alt=''></img>
-                    <div style={{height:'1.5em'}}>{friend.last3Movies[2].Title}</div>*/}
                 </div>
             )}
 
@@ -123,14 +115,12 @@ function FindFriends() {
             <div>
                 {queryResult.map((user, index) =>
                     user.uid !== auth.currentUser.uid ?
-                        <div
-                            key={index}
-                            style={{ color: 'blue' ,fontSize:'1.3em'}}
-                            onMouseEnter={(e) => e.target.style.cursor = "pointer"}
-                            onMouseLeave={(e) => e.target.style.cursor = "default"}
-                            onClick={() => addFriend(user)}
-                        >
-                            ➕{user.name}
+                        <div key={index} onClick={() => addFriend(user)} >
+                            ➕
+                            <img src={user.photoURL} alt='' style={{display: 'inline-block', height:'3em'}}></img>
+                            <div style={{ color: 'blue' ,fontSize:'1.3em', display: 'inline-block'}} >
+                                {user.name}
+                            </div>
                         </div>
                         :
                         <div key={index} > {user.name} </div>
