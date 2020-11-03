@@ -9,7 +9,7 @@ export default function Movie({ id, hoistData }) {
 
         const loadData = async () => {
             try {
-                const response = await axios.get('http://www.omdbapi.com/?apikey=80b79dae&', {
+                const response = await axios.get('https://www.omdbapi.com/?apikey=80b79dae&', {
                     cancelToken: source.token,
                     params: { i: id }
                 });
