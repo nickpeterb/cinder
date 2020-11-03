@@ -5,7 +5,8 @@
 /.pnp
 .pnp.js
 
-#custom
+#firebase
+.firebase
 /src/firebaseInitApp.js
 
 # testing
