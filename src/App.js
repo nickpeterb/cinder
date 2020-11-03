@@ -1,82 +1,115 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import imdbCodes from './imdb-codes.js';
 import './App.css';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
 
-let codes = imdbCodes;
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from "react-router-dom";
 
-//will be imported/exported from db
-//but in another part of the application
-//this file only needs to write to the db (accepted & rejected)
-//might have to run some kind of function that checks on each accept whether it overlaps with anohter user's accepts
-//unless i can periodically run a check in the background (firebase functions)
-let accepted = [];
-let rejected = [];
+import { useAuthState } from 'react-firebase-hooks/auth';
 
-function Movie({id}) {
-  const [movie, setMovie] = useState('');
+import { auth, firestore } from './firebaseInitApp.js';
 
-  useEffect(() => {
-    axios.get('http://www.omdbapi.com/?apikey=80b79dae&', {
-      params: {
-        i: id
+import { SignIn } from './components/SignInOut.js';
+import Selector from './components/Selector.js';
+import MyMovies from './components/MyMovies.js';
+import Friends from './components/Friends.js';
+
+const usersRef = firestore.collection('users');
+
+auth.onAuthStateChanged(function (user) {
+  if (user) {
+    //only write to users to the db if they're not already in the db
+    usersRef.doc(user.uid).get().then(async (doc) => {
+      if (!doc.exists) {
+        await usersRef.doc(user.uid).set({
+          uid: user.uid,
+          name: user.displayName,
+          username: user.displayName.toLowerCase().replace(/\s+/g, ''),
+          photoURL: user.photoURL,
+        })
+      } else {
+        await usersRef.doc(user.uid).set({
+          lastSignIn: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true })
       }
-    })
-    .then(response => {
-      setMovie(response.data);
-    })
-  }, [movie, id]);
+    });
+  }
+});
 
-  return (
-    <>
-    <h1>{movie.Title}</h1>
-    <img src={movie.Poster} alt=''></img>
-    </>
-  );
-}
+export default function App() {
+  const [user, loading, error] = useAuthState(auth);
 
-function Selector() {
-  const [movieId, setMovieId] = useState('');
-
-  const getNewMovie = () => {
-    let randIndex = Math.floor(Math.random() * Math.floor(codes.length));
-    let randMovie = codes[randIndex];
-    codes.splice(randIndex, 1);
-    setMovieId(randMovie);
-    console.log(codes.length);
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error}</p>
+      </div>
+    );
   }
 
-  const acceptMovie = () => {
-    accepted.push(movieId); //this will push to db instead
-    getNewMovie();
-  }
-
-  const rejectMovie = () => {
-    rejected.push(movieId); //this will push to db instead
-    getNewMovie();
-  }
-
-  useEffect(() => {
-    getNewMovie()
-  }, []);
-
-  return (
-    <>
-    <Movie id={movieId} />
-    <br />
-    <button onClick={acceptMovie}>Reject</button>
-    <button onClick={rejectMovie}>Accept</button>
-    </>
-  );
-}
-
-function App() {
-
-  return (
+  return !loading && (
     <div className="App">
-      <Selector />
+      <Router>
+        <Switch>
+
+          <PrivateRoute path="/selector" authenticated={user} component={Selector}></PrivateRoute>
+          <PrivateRoute path="/mymovies" authenticated={user} component={MyMovies}></PrivateRoute>
+          <PrivateRoute path="/friends" authenticated={user} component={Friends}></PrivateRoute>
+          <PublicRoute path="/signin" authenticated={user} component={SignIn}></PublicRoute>
+          <Route exact path="/">{user ? <Redirect to='/selector' /> : <Redirect to='/signin' />}</Route>
+          <Route>
+            <div>404</div>
+          </Route>
+
+        </Switch>
+      </Router>
     </div>
   );
+
+  /*if(loading){
+    return (<>
+      <div>Loading</div>
+    </>)
+  }
+
+  if (user) {
+    return (<>
+      <SignOut />
+      <div>Logged In</div>
+    </>)
+  }
+
+  if (!user) {
+    return (<>
+      <SignIn />
+      <div>Not Logged In</div>
+    </>)
+  }*/
 }
 
-export default App;
+function PublicRoute({ component: Component, authenticated, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={(props) => authenticated === null
+        ? <Component {...props} />
+        : <Redirect to='/selector' />}
+    />
+  )
+}
+
+function PrivateRoute({ component: Component, authenticated, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={(props) => authenticated !== null
+        ? <Component {...props} />
+        : <Redirect to={{ pathname: '/signin', state: { from: props.location } }} />}
+    />
+  )
+}

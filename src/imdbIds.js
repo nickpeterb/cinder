@@ -1,4 +1,4 @@
-const imdbCodes = [ "tt0111161",
+const imdbIds = [ "tt0111161",
 "tt0468569",
 "tt1375666",
 "tt0137523",
@@ -298,4 +298,4 @@ const imdbCodes = [ "tt0111161",
 "tt0800080",
 "tt0119116", ];
 
-export default imdbCodes;
+export default imdbIds;
