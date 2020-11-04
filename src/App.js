@@ -1,7 +1,5 @@
+import { useEffect } from 'react';
 import './App.css';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/auth';
 
 import {
   BrowserRouter as Router,
@@ -12,37 +10,40 @@ import {
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-import { auth, firestore } from './firebaseInitApp.js';
+import { auth, messaging } from './firebaseInitApp.js';
 
 import { SignIn } from './components/SignInOut.js';
 import Selector from './components/Selector.js';
 import MyMovies from './components/MyMovies.js';
 import Friends from './components/Friends.js';
 
-const usersRef = firestore.collection('users');
-
-auth.onAuthStateChanged(function (user) {
-  if (user) {
-    //only write to users to the db if they're not already in the db
-    usersRef.doc(user.uid).get().then(async (doc) => {
-      if (!doc.exists) {
-        await usersRef.doc(user.uid).set({
-          uid: user.uid,
-          name: user.displayName,
-          username: user.displayName.toLowerCase().replace(/\s+/g, ''),
-          photoURL: user.photoURL,
-        })
-      } else {
-        await usersRef.doc(user.uid).set({
-          lastSignIn: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true })
-      }
-    });
-  }
-});
 
 export default function App() {
   const [user, loading, error] = useAuthState(auth);
+
+  useEffect(() => {
+    if (user) {
+      // Get registration token. Initially this makes a network call, once retrieved
+      // subsequent calls to getToken will return from cache.
+      messaging.getToken({ vapidKey: "BMTG1VeSA-vms4rycFzK_EMmXVMofayvI31ito-ZqiM7VOZJ93CWwlDZC7wt6m1V1DdGlMOemVeVMeqhKKe4Fi4" }).then((currentToken) => {
+        if (currentToken) {
+          //sendTokenToServer(currentToken);
+          //updateUIForPushEnabled(currentToken);
+          console.log(currentToken);
+        } else {
+          // Show permission request.
+          console.log('No registration token available. Request permission to generate one.');
+          // Show permission UI.
+          //updateUIForPushPermissionRequired();
+          //setTokenSentToServer(false);
+        }
+      }).catch((err) => {
+        console.log('An error occurred while retrieving token. ', err);
+        //showToken('Error retrieving registration token. ', err);
+        //setTokenSentToServer(false);
+      });
+    } 
+  }, [user]);
 
   if (error) {
     return (
@@ -70,26 +71,6 @@ export default function App() {
       </Router>
     </div>
   );
-
-  /*if(loading){
-    return (<>
-      <div>Loading</div>
-    </>)
-  }
-
-  if (user) {
-    return (<>
-      <SignOut />
-      <div>Logged In</div>
-    </>)
-  }
-
-  if (!user) {
-    return (<>
-      <SignIn />
-      <div>Not Logged In</div>
-    </>)
-  }*/
 }
 
 function PublicRoute({ component: Component, authenticated, ...rest }) {
