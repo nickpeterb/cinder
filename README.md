@@ -1,7 +1,7 @@
 # Cinder
 
-This app helps you find what to watch with your friends. 
-Yes, I know this already exists. I made it to teach myself firebase.
+This React app helps you find what to watch with your friends. 
+Yes, I know this already exists. I made it to teach myself Firebase.
 
 ## Features
 * Easily choose movies using a tinder-like UI
