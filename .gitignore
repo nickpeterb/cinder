@@ -8,6 +8,7 @@
 #firebase
 .firebase
 /src/firebaseInitApp.js
+firebase-debug.log
 
 # testing
 /coverage
