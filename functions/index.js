@@ -19,6 +19,8 @@ exports.notifyUsersOfMoviesInCommon = functions.region('europe-west1').firestore
         const { imdbID } = doc.data();
 
         const currUserDoc = doc.ref.parent.parent;
+        const friendsRef = currUserDoc.collection('friends');
+
         let currUserName = "";
         db.collection('users').doc(currUserDoc.id).get().then(currUser => {
             currUserName = currUser.data().name;
@@ -26,7 +28,7 @@ exports.notifyUsersOfMoviesInCommon = functions.region('europe-west1').firestore
         }).catch((error) => {
             console.log("Error getting currUser document:", error);
         });
-        const friendsRef = currUserDoc.collection('friends');
+        
 
         friendsRef.get().then( (querySnapshot) => {
 
@@ -39,25 +41,29 @@ exports.notifyUsersOfMoviesInCommon = functions.region('europe-west1').firestore
 
                 isMovieInCommon.get().then( (movie) => {
                     if (movie.exists) {
+
                         // Notify friend
                         db.collection('users').doc(friendUid).collection('notifications').add({
+                            type: 'just-liked',
                             msg: currUserName + ' just liked ' + movie.data().Title + '!',
                             friendUid: currUserDoc.id,
-                            movieInCommon: imdbID
+                            movieInCommon: imdbID,
+                            createdAt: admin.firestore.FieldValue.serverTimestamp(),
                         }).catch( (error) => {
                             console.error("Error adding notification document: ", error);
                         });
+
                         // Notify current user
                         db.collection('users').doc(currUserDoc.id).collection('notifications').add({
+                            type: 'also-likes',
                             msg: friendName + ' also likes ' + movie.data().Title + '!',
                             friendUid,
-                            movieInCommon: imdbID
+                            movieInCommon: imdbID,
+                            createdAt: admin.firestore.FieldValue.serverTimestamp(),
                         }).catch( (error) => {
                             console.error("Error adding notification document: ", error);
                         });
-                    } else {
-                        // Do something else
-                        console.log("No such document!");
+
                     }
                     return null;  
                 }).catch((error) => {
