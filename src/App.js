@@ -13,7 +13,7 @@ import {
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-import { auth } from './firebaseInitApp.js';
+import { auth, firestore } from './firebaseInitApp.js';
 
 import { SignIn } from './components/SignInOut.js';
 import Selector from './components/Selector.js';
@@ -24,8 +24,13 @@ export default function App() {
   const [user, loading, error] = useAuthState(auth);
 
   useEffect(() => {
-    if(firebase.messaging.isSupported() && user) {
+    if (firebase.messaging.isSupported() && user) {
       const messaging = firebase.messaging();
+
+      messaging.onMessage((payload) => {
+        console.log('Message received. ', payload);
+        // ...
+      });
 
       // Get registration token. Initially this makes a network call, once retrieved
       // subsequent calls to getToken will return from cache.
@@ -33,7 +38,10 @@ export default function App() {
         if (currentToken) {
           //sendTokenToServer(currentToken);
           //updateUIForPushEnabled(currentToken);
-          console.log(currentToken);
+          console.log('token',currentToken);
+          firestore.collection('users').doc(auth.currentUser.uid).set({
+            fcmToken: currentToken
+          }, {merge: true });
         } else {
           // Show permission request.
           console.log('No registration token available. Request permission to generate one.');
@@ -46,7 +54,7 @@ export default function App() {
         //showToken('Error retrieving registration token. ', err);
         //setTokenSentToServer(false);
       });
-    } 
+    }
   }, [user]);
 
   if (error) {
