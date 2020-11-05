@@ -22,10 +22,10 @@ exports.notifyUsersOfMoviesInCommon = functions.region('europe-west1').firestore
         const friendsRef = currUserDoc.collection('friends');
 
         let currUserName = "";
-        let currUserToken = "";
+        //let currUserToken ;
         db.collection('users').doc(currUserDoc.id).get().then(currUser => {
             currUserName = currUser.data().name;
-            currUserToken = currUser.data().fcmToken;
+            //currUserToken = currUser.data().fcmToken;
             return null;
         }).catch((error) => {
             console.log("Error getting currUser document:", error);
@@ -39,7 +39,15 @@ exports.notifyUsersOfMoviesInCommon = functions.region('europe-west1').firestore
 
                 let friendUid = friend.data().uid;
                 let friendName = friend.data().name;
-                let friendToken = friend.data().token;
+                
+                /*let friendToken ;
+                db.collection('users').doc(friendUid).get().then(fri => {
+                    friendToken = fri.data().fcmToken;
+                    return null;
+                }).catch((error) => {
+                    console.log("Error getting friend's token:", error);
+                });*/
+
                 let isMovieInCommon = db.collection('users').doc(friendUid).collection('accepted').doc(imdbID);
 
                 isMovieInCommon.get().then((movie) => {
@@ -58,11 +66,11 @@ exports.notifyUsersOfMoviesInCommon = functions.region('europe-west1').firestore
                             console.error("Error adding notification document: ", error);
                         });
 
-                        if (friendToken) {
+                        /*if (friendToken) {
                             // Send friend a message
                             var messageFriend = {
                                 data: {
-                                    msg: friendName + ' just liked ' + movie.data().Title + '!',
+                                    msg: currUserName + ' just liked ' + movie.data().Title + '!',
                                 },
                                 token: friendToken
                             };
@@ -74,7 +82,9 @@ exports.notifyUsersOfMoviesInCommon = functions.region('europe-west1').firestore
                                 .catch((error) => {
                                     console.log('Error sending message:', error);
                                 });
-                        }
+                        } else {
+                            console.log('currUser: ' + currUserName + ' - ' + 'friend ' + friendName +' has no token: ' + friendToken);
+                        }*/
 
                         // -- Notify Current User --
 
@@ -89,7 +99,7 @@ exports.notifyUsersOfMoviesInCommon = functions.region('europe-west1').firestore
                             console.error("Error adding notification document: ", error);
                         });
 
-                        if (currUserToken) {
+                        /*if (currUserToken) {
                             // Send current user a message
                             var messageUser = {
                                 data: {
@@ -105,7 +115,10 @@ exports.notifyUsersOfMoviesInCommon = functions.region('europe-west1').firestore
                                 .catch((error) => {
                                     console.log('Error sending message:', error);
                                 });
-                        }
+                        } else {
+                            console.log('currUser has no token');
+                            console.log('friendName', friendName);
+                        }*/
                     }
                     return null;
                 }).catch((error) => {
