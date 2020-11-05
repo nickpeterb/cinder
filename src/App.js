@@ -1,7 +1,7 @@
-import firebase from 'firebase/app';
+/*import firebase from 'firebase/app';
 import 'firebase/messaging';
+import { useEffect } from 'react';*/
 
-import { useEffect } from 'react';
 import './App.css';
 
 import {
@@ -13,7 +13,7 @@ import {
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-import { auth, firestore } from './firebaseInitApp.js';
+import { auth } from './firebaseInitApp.js';
 
 import { SignIn } from './components/SignInOut.js';
 import Selector from './components/Selector.js';
@@ -23,6 +23,7 @@ import Friends from './components/Friends.js';
 export default function App() {
   const [user, loading, error] = useAuthState(auth);
 
+  /*
   useEffect(() => {
     if (firebase.messaging.isSupported() && user) {
       const messaging = firebase.messaging();
@@ -38,7 +39,7 @@ export default function App() {
         if (currentToken) {
           //sendTokenToServer(currentToken);
           //updateUIForPushEnabled(currentToken);
-          console.log('token',currentToken);
+          //console.log('token',currentToken);
           firestore.collection('users').doc(auth.currentUser.uid).set({
             fcmToken: currentToken
           }, {merge: true });
@@ -56,6 +57,7 @@ export default function App() {
       });
     }
   }, [user]);
+  */
 
   if (error) {
     return (
