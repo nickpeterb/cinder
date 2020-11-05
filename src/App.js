@@ -1,3 +1,6 @@
+import firebase from 'firebase/app';
+import 'firebase/messaging';
+
 import { useEffect } from 'react';
 import './App.css';
 
@@ -10,19 +13,20 @@ import {
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-import { auth, messaging } from './firebaseInitApp.js';
+import { auth } from './firebaseInitApp.js';
 
 import { SignIn } from './components/SignInOut.js';
 import Selector from './components/Selector.js';
 import MyMovies from './components/MyMovies.js';
 import Friends from './components/Friends.js';
 
-
 export default function App() {
   const [user, loading, error] = useAuthState(auth);
 
   useEffect(() => {
-    if (user) {
+    if(firebase.messaging.isSupported() && user) {
+      const messaging = firebase.messaging();
+
       // Get registration token. Initially this makes a network call, once retrieved
       // subsequent calls to getToken will return from cache.
       messaging.getToken({ vapidKey: "BMTG1VeSA-vms4rycFzK_EMmXVMofayvI31ito-ZqiM7VOZJ93CWwlDZC7wt6m1V1DdGlMOemVeVMeqhKKe4Fi4" }).then((currentToken) => {
