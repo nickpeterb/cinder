@@ -10,14 +10,6 @@ export default function Friends() {
 
     const [friends, loading, error] = useCollectionData(friendsRef);
 
-    // if i want to display the last 3 movies
-    // use the map function to make a query to the accepted collection of the each friend
-    // and return the last 3 entries
-
-    // also, make it so when you click on a name it shows a page with all their liked movies
-    // ideally, this would link to a custom url for each user
-    // but for now i can just conditionally render a new component 
-
     if (loading) {
         return (
             <div>Loading...</div>
