@@ -4,6 +4,8 @@ import 'firebase/auth';
 
 import { auth, firestore } from '../firebaseInitApp.js';
 
+import './styles/SignInOut.css';
+
 export function SignIn() {
     const usersRef = firestore.collection('users');
 
@@ -31,13 +33,22 @@ export function SignIn() {
     }
 
     return (
-        <button onClick={signInWithGoogle}>Sign in with Google</button>
+        <div className='signin'>
+
+        <div className="signin-title">cinder</div>
+        <div className="signin-subtitle">Find what to watch with your friends!</div>
+        
+        <div className="signInWithGoogle" onClick={signInWithGoogle}>
+            <img className="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt=''/>
+            <div className='google-btn-text '>Sign in with Google</div>
+        </div>
+        </div>
     )
 
 }
 
 export function SignOut() {
     return auth.currentUser && (
-        <button onClick={() => auth.signOut()}>Sign Out</button>
+        <button className='signout-btn' onClick={() => auth.signOut()}>Sign Out</button>
     )
 }

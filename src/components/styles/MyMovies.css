@@ -1,0 +1,36 @@
+.mymovies {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.movie-card {
+    max-width: 30em;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin: 1em auto;
+    padding: 1em;
+    border-radius: 1em;
+    
+    background-color: rgb(84, 100, 116);
+    border: 2px solid rgb(108, 153, 190);
+}
+
+.movie-card-poster {
+    height: 7em;
+}
+
+.movie-card-desc{
+    padding: 1em;
+}
+
+.movie-card-title {
+    font-size: 1.5em;
+}
+
+.movie-card-plot{
+    font-size: 0.7em;
+    padding-left: 1em;
+}

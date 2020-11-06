@@ -1,0 +1,28 @@
+.navbar {
+    background-color: #375a7f;
+    padding: 1em;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center ;
+    align-items: center;
+}
+
+.navlink {
+    margin-right: 1em;
+    font-size: 1.1em;
+    text-decoration: none;
+    color: whitesmoke;
+}
+
+.active {
+    color: rgb(162, 172, 182) !important;
+}
+
+.signout-btn {
+    font-size: 1em;
+    border: none;
+    background-color: whitesmoke;
+    border-radius: 0.5em;
+    padding: 0.3em 0.7em 0.3em 0.7em;
+}

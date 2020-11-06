@@ -19,6 +19,7 @@ import { SignIn } from './components/SignInOut.js';
 import Selector from './components/Selector.js';
 import MyMovies from './components/MyMovies.js';
 import Friends from './components/Friends.js';
+import Navbar from './components/Navbar.js';
 
 export default function App() {
   const [user, loading, error] = useAuthState(auth);
@@ -70,6 +71,7 @@ export default function App() {
   return !loading && (
     <div className="App">
       <Router>
+        {user && <Navbar /> }
         <Switch>
 
           <PrivateRoute path="/selector" authenticated={user} component={Selector}></PrivateRoute>

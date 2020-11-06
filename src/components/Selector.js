@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react';
 import firebase from 'firebase/app';
 import { auth, firestore } from '../firebaseInitApp.js';
 import Movie from './Movie.js';
-import {SignOut} from './SignInOut.js';
 
-import { Link } from "react-router-dom";
+import './styles/Selector.css';
 
 import imdbIds from '../imdbIds.js';
 let ids = imdbIds;
@@ -27,6 +26,7 @@ export default function Selector() {
             imdbID: movieId,
             Title: movie.Title,
             Poster: movie.Poster,
+            Plot: movie.Plot,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         })
             .then(
@@ -53,16 +53,15 @@ export default function Selector() {
 
     return (
         <>
-            <div>Hi, {auth.currentUser && auth.currentUser.displayName}</div>
-            <br />
-            <Link to="/mymovies" style={{marginRight:'20px'}}>My Movies</Link>
-            <Link to="/friends" style={{marginRight:'20px'}}>Friends</Link>
-            <SignOut />
-            <br />
+            
+            {/*<div>Hi, {auth.currentUser && auth.currentUser.displayName}</div>*/}
+
             <Movie id={movieId} hoistData={movie => setMovie(movie)}/>
-            <br />
-            <button onClick={rejectMovie}>Reject</button>
-            <button onClick={acceptMovie}>Accept</button>
+
+            <div className="control-btns">
+                <button className="reject-btn" onClick={rejectMovie}>👎</button>
+                <button className="accept-btn" onClick={acceptMovie}>👍</button>
+            </div>
         </>
     );
 }

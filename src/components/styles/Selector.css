@@ -1,0 +1,24 @@
+.accept-btn {
+    font-size: 1.5em;
+    border: none;
+    background-color: #00bc8c;
+    color: whitesmoke;
+    border-radius: 0.5em;
+    padding: 0.5em 2em 0.5em 2em;
+    margin: 1em;
+}
+
+.reject-btn {
+    font-size: 1.5em;
+    border: none;
+    background-color: #e74c3c;
+    color: whitesmoke;
+    border-radius: 0.5em;
+    padding: 0.5em 2em 0.5em 2em;
+    margin: 1em;
+}
+
+
+.signout-btn:hover, .accept-btn:hover, .reject-btn:hover {
+    cursor: pointer;
+}

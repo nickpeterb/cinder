@@ -1,0 +1,41 @@
+.signin {
+    padding-top: 25vh;
+}
+
+.signin-title {
+    font-size: 5em;
+    font-weight: 500;
+    padding: 0.5em 0.5em 0 0.5em;
+}
+
+.signin-subtitle {
+    font-size: 1.2em;
+    padding-bottom: 2em;
+}
+
+.signInWithGoogle {
+    width: max-content;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    font-size: 1.5rem;
+    background-color: whitesmoke;
+    color: black;
+    border-radius: 1em;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.signInWithGoogle:hover {
+    cursor: pointer;
+}
+
+.google-icon {
+    display: inline-block;
+    height: 1.1em;
+    margin: 0 0.5em 0 0.5em;
+}
+
+.google-btn-text {
+    position: relative;
+    top: -4px;
+    display: inline-block;
+}

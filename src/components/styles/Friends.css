@@ -1,0 +1,79 @@
+.search {
+    padding-top: 2em;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+    background-color:#676a6d;
+}
+
+.search-form {
+    margin-bottom: 2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-box {
+    font-size: 1.5em;
+    border: none;
+}
+
+.search-btn {
+    margin-left: 1em;
+    font-size: 1.3em;
+    border: none;
+    background-color: whitesmoke;
+    border-radius: 0.5em;
+    padding: 0.3em 0.7em 0.3em 0.7em;
+}
+
+.search-result{
+    margin-bottom: 1em;
+}
+
+.search-result-img {
+    display: inline-block;
+    height: 2.5em;
+    border-radius: 50%;
+}
+
+.search-result-name {
+    display: inline-block;
+    font-size: 1.7em;
+    padding: 0.3em;
+    position: relative;
+    top: -0.4em;
+}
+
+.friend {
+    margin-bottom: 1em;
+    
+}
+
+.friend-img {
+    display: inline-block;
+    height: 2.6em;
+    border-radius: 50%;
+}
+
+.friend-name {
+    display: inline-block;
+    font-size: 2em;
+    padding: 0.6em 0 0.5em 0.5em;
+    position: relative;
+    top: -0.2em;
+}
+
+.friends-movies {
+    overflow-x: scroll;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.friends-movies-poster {
+    height: 12em;
+    margin-right: 1em;
+    justify-content: center;
+}

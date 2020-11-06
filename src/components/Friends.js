@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { auth, firestore } from '../firebaseInitApp.js';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-import { Link } from 'react-router-dom';
+import './styles/Friends.css'
 
 export default function Friends() {
 
@@ -19,19 +19,12 @@ export default function Friends() {
 
     return (
         <div>
-            <Link to='/selector'>Home</Link>
-            <br />
-            <br />
-
-            <div>Find Friends</div>
             <FindFriends />
-            <br />
-
-            <div style={{ fontWeight: 'bold' }}>Friends</div>
+            
             {friends && friends.map((friend, index) =>
-                <div key={index} style={{ marginTop: '10px'}}>
-                    <img src={friend.photoURL} alt='' style={{display: 'inline-block', height:'3em'}}></img>
-                    <div style={{fontSize:'1.3em', display: 'inline-block'}}>{friend.name}</div>
+                <div key={index} className='friend'>
+                    <img src={friend.photoURL} alt='' className='friend-img'></img>
+                    <div className='friend-name'>{friend.name}</div>
                     <FriendsMovies friend={friend} />
                 </div>
             )}
@@ -47,9 +40,9 @@ function FriendsMovies({ friend }) {
     const [movies] = useCollectionData(query);
 
     return (
-        <div style={{marginTop: '20px', overflowX:'scroll', width:'100%', height:'8em', display: 'flex', flexDirection:'row', flexWrap:'nowrap'}}>
+        <div className='friends-movies'>
             {movies && movies.map((movie, index) => 
-                <img src={movie.Poster} alt='' style={{height:'6em', marginRight:'20px', justifyContent:'center'}} key={index}></img>
+                <img src={movie.Poster} alt='' className='friends-movies-poster' key={index}></img>
             )}
         </div>
     );
@@ -98,24 +91,24 @@ function FindFriends() {
     }
 
     return (
-        <div>
-            <form onSubmit={searchUsers}>
-                <input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="find a friend..." />
-                <button type="submit" disabled={!formValue}>Search</button>
+        <div className='search'>
+            <form className="search-form" onSubmit={searchUsers}>
+                <input className="search-box" value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="Find a friend" />
+                <button className="search-btn" type="submit" disabled={!formValue}>Search</button>
             </form>
 
             <div>
                 {queryResult.map((user, index) =>
                     user.uid !== auth.currentUser.uid ?
-                        <div key={index} onClick={() => addFriend(user)} >
-                            ➕
-                            <img src={user.photoURL} alt='' style={{display: 'inline-block', height:'3em'}}></img>
-                            <div style={{ color: 'blue' ,fontSize:'1.3em', display: 'inline-block'}} >
-                                {user.name}
-                            </div>
+                        <div key={index} onClick={() => addFriend(user)} className='search-result'>
+                            <img src={user.photoURL} alt='' className='search-result-img'></img>
+                            <div className='search-result-name'>{user.name}</div>
                         </div>
                         :
-                        <div key={index} > {user.name} </div>
+                        <div className='search-result'>
+                            <img src={user.photoURL} alt='' className='search-result-img'></img>
+                            <div key={index} className="search-result-name current-user"> {user.name} </div>
+                        </div>
                 )}
             </div>
 
